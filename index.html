@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Same Time Next Year · An AU Story</title>
+  <meta name="description" content="An interactive alternate-universe story told through Notes, WhatsApp, Gallery and X.">
+  <meta name="theme-color" content="#f2f2f7">
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="vendor/leaflet/leaflet.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/apps.css">
+  <style>
+    #app-loading { position: fixed; inset: 0; z-index: 9999; display: grid; place-items: center; background: #f2f2f7; color: #555; font: 500 15px system-ui, sans-serif; }
+  </style>
+  <script src="vendor/leaflet/leaflet.js"></script>
+  <script type="module" src="js/main.js"></script>
+</head>
+<body data-view="landing">
+  <div id="app-loading" role="status">Loading story…</div>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <nav id="floating-nav" class="fnav" aria-label="Main"></nav>
+
+  <main id="main">
+    <!-- 1 & 2. Landing: characters, then dates -->
+    <div id="view-landing" class="view is-active">
+      <section id="characters" class="hero">
+        <div class="hero__inner">
+          <p class="eyebrow">An AU story · Batam, March 2026</p>
+          <h1 id="landing-title"></h1>
+          <p id="landing-subtitle" class="hero__sub"></p>
+          <div id="landing-cards" class="char-grid"></div>
+          <button type="button" class="scroll-cue" data-action="scroll-dates">Choose a date <span>↓</span></button>
+        </div>
+      </section>
+
+      <section id="dates" class="dates">
+        <div class="dates__inner">
+          <p class="eyebrow">Step 2</p>
+          <h2>Pick a day to read</h2>
+          <p class="dates__lead">The story spans three days. Every app shows what happened on the day you pick, from the point of view you chose.</p>
+          <div id="landing-dates" class="date-list"></div>
+          <div id="landing-detail"></div>
+        </div>
+      </section>
+    </div>
+
+    <!-- 3. Home screen -->
+    <div id="view-home" class="view" hidden>
+      <div id="home-content" class="home"></div>
+    </div>
+  </main>
+
+  <!-- Apps open over the home screen -->
+  <div id="app-layer" class="app-layer">
+    <section id="app-notes" class="app app--notes" hidden aria-label="Notes"></section>
+    <section id="app-whatsapp" class="app app--whatsapp" hidden aria-label="WhatsApp"></section>
+    <section id="app-gallery" class="app app--gallery" hidden aria-label="Gallery"></section>
+    <section id="app-twitter" class="app app--twitter" hidden aria-label="X"></section>
+    <section id="app-stories" class="app app--stories" hidden aria-label="Stories"></section>
+  </div>
+</body>
+</html>
