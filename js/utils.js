@@ -14,26 +14,35 @@ const weekdayLong = fmt('en-GB', { weekday: 'long' });
 const dayNum = fmt('en-GB', { day: 'numeric' });
 const full = fmt('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
 
+/** Format aman: tanggal kosong / tidak valid menghasilkan '' alih-alih RangeError. */
+const safe = (formatter, date) => (date instanceof Date && !Number.isNaN(date.getTime()) ? formatter.format(date) : '');
 const noon = (key) => new Date(`${key}T12:00:00+07:00`);
+const at = (ts) => new Date(ts);
 
 export const esc = (value) =>
   String(value ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 
 export const nl2br = (value) => esc(value).replace(/\n/g, '<br>');
 
-/** 'YYYY-MM-DD' of an ISO timestamp, in story time (Jakarta). */
-export const dateKey = (ts) => keyFmt.format(new Date(ts));
-export const formatTime = (ts) => time24.format(new Date(ts));
-export const formatTime12 = (ts) => time12.format(new Date(ts));
-export const formatDayLong = (key) => dayLong.format(noon(key)); // Saturday 14 March
-export const formatDayShort = (key) => dayShort.format(noon(key)); // Sat 14 Mar
-export const formatDayMonth = (key) => dayMonth.format(noon(key)); // 14 Mar
-export const formatMonthShort = (key) => monthShort.format(noon(key));
-export const formatWeekday = (key) => weekdayLong.format(noon(key));
-export const formatDayNumber = (key) => dayNum.format(noon(key));
-export const formatFullDate = (key) => full.format(noon(key));
-export const formatStamp = (ts) => `${dayMonth.format(new Date(ts))}, ${time24.format(new Date(ts))}`; // 14 Mar, 05:12
-export const formatFullStamp = (ts) => `${full.format(new Date(ts))} · ${time24.format(new Date(ts))}`;
+/** 'YYYY-MM-DD' of an ISO timestamp, in story time (Jakarta). '' kalau tidak valid. */
+export const dateKey = (ts) => safe(keyFmt, at(ts));
+export const formatTime = (ts) => safe(time24, at(ts));
+export const formatTime12 = (ts) => safe(time12, at(ts));
+export const formatDayLong = (key) => safe(dayLong, noon(key)); // Saturday 14 March
+export const formatDayShort = (key) => safe(dayShort, noon(key)); // Sat 14 Mar
+export const formatDayMonth = (key) => safe(dayMonth, noon(key)); // 14 Mar
+export const formatMonthShort = (key) => safe(monthShort, noon(key));
+export const formatWeekday = (key) => safe(weekdayLong, noon(key));
+export const formatDayNumber = (key) => safe(dayNum, noon(key));
+export const formatFullDate = (key) => safe(full, noon(key));
+export const formatStamp = (ts) => {
+  const d = at(ts);
+  return safe(dayMonth, d) ? `${safe(dayMonth, d)}, ${safe(time24, d)}` : ''; // 14 Mar, 05:12
+};
+export const formatFullStamp = (ts) => {
+  const d = at(ts);
+  return safe(full, d) ? `${safe(full, d)} · ${safe(time24, d)}` : '';
+};
 
 export const truncate = (text, max = 48) => {
   const clean = String(text ?? '').replace(/\s+/g, ' ').trim();

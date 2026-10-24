@@ -34,6 +34,11 @@ export const appTiles = {
     <path d="M21 22h22M21 29h22M21 36h17" stroke="#8c7967" stroke-width="2" stroke-linecap="round"/>
     <path d="M21 44h12" stroke="#b6a28b" stroke-width="2" stroke-linecap="round"/>
   </svg>`,
+  settings: {
+     title: 'Settings',
+     tile: '<svg viewBox="0 0 60 60" aria-hidden="true"><rect width="60" height="60" rx="14" fill="#8e8e93"/><g transform="translate(30 30)" fill="#fff"><circle r="12"/><rect x="-3" y="-18" width="6" height="36" rx="2"/><rect x="-3" y="-18" width="6" height="36" rx="2" transform="rotate(45)"/><rect x="-3" y="-18" width="6" height="36" rx="2" transform="rotate(90)"/><rect x="-3" y="-18" width="6" height="36" rx="2" transform="rotate(135)"/><circle r="5" fill="#8e8e93"/></g></svg>'
+   },
+
 
 };
 

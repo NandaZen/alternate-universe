@@ -1,19 +1,18 @@
 // One global state shared by every app.
 //   activeCharacterId – whose POV the reader is in
-//   activeStoryDate   – 'YYYY-MM-DD' from the timeline
+//   activeStoryDate   – 'YYYY-MM-DD' dari koleksi Firestore "timeline"
 //   activeApp         – null | 'notes' | 'whatsapp' | 'gallery' | 'twitter' | 'stories'
 // Extra: view ('landing' | 'home'), scope ('day' | 'upto'), focus (one-shot "open this item").
 // Hanya activeCharacterId, activeStoryDate, scope yang disimpan ke localStorage.
 
-import { getPlayable } from './data/store.js';
-import { storyDates } from './data/timeline.js';
+import { getPlayable, getTimeline } from './data/store.js';
 
 const STORAGE_KEY = 'au-story:v1';
 const PERSISTED = ['activeCharacterId', 'activeStoryDate', 'scope'];
 
 const state = {
   activeCharacterId: '',
-  activeStoryDate: storyDates[0],
+  activeStoryDate: '',
   activeApp: null,
   view: 'landing',
   scope: 'day',
@@ -21,6 +20,9 @@ const state = {
 };
 
 const listeners = new Set();
+
+/** Daftar tanggal cerita (urut) dari Firestore. */
+export const getStoryDates = () => getTimeline().map((d) => d.date);
 
 function readSaved() {
   try {
@@ -44,8 +46,9 @@ function writeSaved() {
 export function initState() {
   const saved = readSaved();
   const ids = getPlayable().map((c) => c.id);
+  const dates = getStoryDates();
   state.activeCharacterId = ids.includes(saved.activeCharacterId) ? saved.activeCharacterId : ids[0] || '';
-  if (storyDates.includes(saved.activeStoryDate)) state.activeStoryDate = saved.activeStoryDate;
+  state.activeStoryDate = dates.includes(saved.activeStoryDate) ? saved.activeStoryDate : dates[0] || '';
   if (saved.scope === 'day' || saved.scope === 'upto') state.scope = saved.scope;
   return state;
 }
@@ -77,19 +80,21 @@ export function setCharacter(id) {
 }
 
 export function setDate(date) {
-  if (!storyDates.includes(date)) return false;
+  if (!getStoryDates().includes(date)) return false;
   return setState({ activeStoryDate: date });
 }
 
 export function stepDate(delta) {
-  const index = storyDates.indexOf(state.activeStoryDate) + delta;
-  if (index < 0 || index >= storyDates.length) return false;
-  return setState({ activeStoryDate: storyDates[index] });
+  const dates = getStoryDates();
+  const index = dates.indexOf(state.activeStoryDate) + delta;
+  if (index < 0 || index >= dates.length) return false;
+  return setState({ activeStoryDate: dates[index] });
 }
 
 export const canStep = (delta) => {
-  const index = storyDates.indexOf(state.activeStoryDate) + delta;
-  return index >= 0 && index < storyDates.length;
+  const dates = getStoryDates();
+  const index = dates.indexOf(state.activeStoryDate) + delta;
+  return index >= 0 && index < dates.length;
 };
 
 export const setScope = (scope) => (scope === 'day' || scope === 'upto') && setState({ scope });

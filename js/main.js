@@ -8,6 +8,11 @@ import { initWhatsApp } from './apps/whatsapp.js';
 import { initGallery } from './apps/gallery.js';
 import { initTwitter } from './apps/twitter.js';
 import { initStories } from './apps/stories.js';
+import { initPhone } from './phone/shell.js';
+import { initSettingsApp } from './apps/settings.js';
+import { initCalls } from './phone/call.js';
+import { initLock } from './phone/lock.js';
+import { initTransitions } from './phone/transitions.js';
 
 await startStore(); // tunggu semua koleksi terbaca dulu
 initState();
@@ -19,6 +24,11 @@ initWhatsApp(registerAction);
 initGallery(registerAction);
 initTwitter(registerAction);
 initStories(registerAction);
+initSettingsApp();
+initPhone();
+initLock();
+initTransitions();
+initCalls();
 applyRoute();
 
 onStoreChange(() => {

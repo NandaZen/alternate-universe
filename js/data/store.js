@@ -1,13 +1,12 @@
 // data/store.js — satu-satunya sumber data dari Firestore untuk semua aplikasi ponsel.
-// Koleksi: characters, chats, messages, stickers, narrations, notes, photos, places, posts
-// (stories/chapters/blocks dibaca langsung oleh apps/stories.js).
-// Hanya timeline (data/timeline.js) yang tetap lokal.
+// Koleksi: characters, chats, messages, stickers, narrations, notes, photos, places, posts,
+// timeline, settings (stories/chapters/blocks dibaca langsung oleh apps/stories.js).
 
 import { collection, onSnapshot } from './fsdk.js';
 import { db } from '../firebase.js';
-import { dateKey, esc, truncate } from '../utils.js';
+import { dateKey, esc, truncate, formatDayLong } from '../utils.js';
 
-const NAMES = ['characters', 'chats', 'messages', 'stickers', 'narrations', 'notes', 'photos', 'places', 'posts'];
+const NAMES = ['characters', 'chats', 'messages', 'stickers', 'narrations', 'notes', 'photos', 'places', 'posts', 'timeline', 'settings'];
 const raw = Object.fromEntries(NAMES.map((n) => [n, []]));
 const loaded = new Set();
 const listeners = new Set();
@@ -57,6 +56,7 @@ export function startStore() {
 }
 
 export const isStoreReady = () => loaded.size === NAMES.length;
+export const getCollection = (name) => raw[name] || [];
 
 export function onStoreChange(fn) {
   listeners.add(fn);
@@ -76,6 +76,44 @@ export function inScope(ts, state, mode = state.scope) {
   if (!cur || !ts) return true;
   const d = dateKey(ts);
   return mode === 'day' ? d === cur : d <= cur;
+}
+
+/* ---------- meta cerita & timeline (Firestore, fallback ke data lokal) ---------- */
+
+/** settings/story → { title, subtitle, ... }. Field kosong memakai fallback. */
+export function getStoryMeta(fallback = {}) {
+  const doc = raw.settings.find((d) => d.id === 'story');
+  const { id, ...rest } = nonEmpty(doc || {});
+  return { ...fallback, ...rest };
+}
+
+/** Koleksi timeline, urut tanggal. Kalau kosong, pakai fallback. */
+/** Koleksi timeline, urut tanggal. Kalau kosong, hari dibentuk dari tanggal konten di Firestore. */
+export function getTimeline(fallback = []) {
+  const explicit = raw.timeline
+    .filter((d) => d.date)
+    .map((d) => ({ ...d, events: Array.isArray(d.events) ? d.events : [] }))
+    .sort((a, b) => String(a.date).localeCompare(String(b.date)));
+  if (explicit.length) return explicit;
+
+  const dates = new Set();
+  const add = (ts) => {
+    if (ts && !Number.isNaN(Date.parse(ts))) dates.add(dateKey(ts));
+  };
+  raw.notes.forEach((n) => add(n.updatedAt));
+  raw.messages.forEach((m) => add(m.timestamp));
+  raw.photos.forEach((p) => add(p.timestamp));
+  raw.posts.forEach((p) => add(p.timestamp));
+
+  const derivedDays = [...dates].sort().map((date, i) => ({
+    id: date,
+    date,
+    label: `Day ${i + 1}`,
+    title: formatDayLong(date),
+    summary: '',
+    events: [],
+  }));
+  return derivedDays.length ? derivedDays : fallback;
 }
 
 /* ---------- avatar ---------- */
@@ -100,6 +138,7 @@ function normChar(fs) {
     avatar: photo,
     image: photo,
     photo,
+    wallpaper: m.wallpaperUrl || m.wallpaper || '',
     accent: m.accent || '#128c7e',
     phone: m.phone || '',
     location: m.location || '',
@@ -346,7 +385,7 @@ export function describeContent(found) {
   if (type === 'message') {
     const who = chat.isGroup
       ? chat.name
-      : getCharacter((chat.memberIds || []).find((x) => x !== found.characterId))?.name.split(' ')[0] || 'Chat';
+      : String(getCharacter((chat.memberIds || []).find((x) => x !== found.characterId))?.name || 'Chat').split(' ')[0];
     text = `${who}: ${item.text ? truncate(item.text, 26) : 'Sticker'}`;
   }
   return { label: `${TYPE_LABEL[type]} · ${text}`, short: TYPE_LABEL[type] };
