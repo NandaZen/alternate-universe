@@ -277,3 +277,37 @@ body[data-view="home"][data-app=""] .statusbar::before { display: none; }
 body[data-call] .statusbar { color: #fff; }
 body[data-call] .statusbar::before { display: none; }
 body[data-call] .phone__home span { background: #fff; }
+/* Home screen menyesuaikan viewport pendek */
+@media (max-height: 760px) {
+  .phone {
+    --sb-h: 44px;
+    --home-h: 24px;
+  }
+
+  .ios-home {
+    gap: 10px;
+    padding-bottom: calc(var(--home-h) + 4px);
+  }
+
+  .ios-widgets {
+    gap: 8px;
+  }
+
+  .widget {
+    min-height: 100px;
+    padding: 10px;
+  }
+
+  .ios-grid {
+    gap: 12px 8px;
+  }
+
+  .ios-icon .app-tile {
+    width: 52px;
+    height: 52px;
+  }
+
+  .ios-dock {
+    padding: 8px;
+  }
+}
