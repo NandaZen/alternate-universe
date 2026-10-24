@@ -165,11 +165,14 @@ export function renderNav() {
     </button>`;
 
   let middle;
+  
   if (inApp) {
     const meta = APP_META[s.activeApp];
+
     middle = `<button type="button" class="fnav__btn" data-action="nav" data-route="home" aria-label="Back to home screen">${icon('chevronLeft', 18)}<span class="fnav__label">Home</span></button>
-      <span class="fnav__app"><span class="app-tile app-tile--xs">${meta.tile}</span><strong>${esc(meta.title)}</strong></span>`;
+      <span class="fnav__app"><span class="app-tile app-tile--xs">${meta?.tile ?? ''}</span><strong>${esc(meta?.title ?? s.activeApp)}</strong></span>`;
   } else {
+
     const item = (route, name, iconHtml, active) =>
       `<button type="button" class="fnav__btn ${active ? 'is-active' : ''}" data-action="nav" data-route="${route}" ${active ? 'aria-current="page"' : ''} aria-label="${name}">${iconHtml}<span class="fnav__label">${name}</span></button>`;
     middle =

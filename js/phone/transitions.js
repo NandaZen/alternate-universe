@@ -5,33 +5,72 @@ import { $ } from '../utils.js';
 
 const reduced = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
 
+
 function openFrom(name, tries = 0) {
   const el = $(`#app-${name}`);
   const screen = $('#phone-screen');
   if (!el || !screen) return;
+
   if (el.hidden) {
     if (tries < 3) requestAnimationFrame(() => openFrom(name, tries + 1));
     return;
   }
 
   const sr = screen.getBoundingClientRect();
-  const btn = [...document.querySelectorAll('.ios-icon')].find((b) => b.dataset.app === name);
-  const ir = (btn?.querySelector('.app-tile') || btn)?.getBoundingClientRect();
+  const btn = [...document.querySelectorAll('.ios-icon')]
+    .find((b) => b.dataset.app === name);
+
+  const ir = (btn?.querySelector('.app-tile') || btn)
+    ?.getBoundingClientRect();
 
   let from;
+  let startTransformOrigin = 'center center';
+
   if (ir && ir.width > 0 && sr.width > 0) {
-    const s = ir.width / sr.width;
+    const scale = ir.width / sr.width;
     const dx = ir.left + ir.width / 2 - (sr.left + sr.width / 2);
     const dy = ir.top + ir.height / 2 - (sr.top + sr.height / 2);
-    from = { transform: `translate(${dx}px, ${dy}px) scale(${s})`, borderRadius: `${14 / s}px`, opacity: 0.6 };
+
+    from = {
+      transform: `translate(${dx}px, ${dy}px) scale(${scale})`,
+      borderRadius: `${14 / scale}px`,
+      opacity: 0.7,
+      filter: 'blur(1px)',
+    };
   } else {
-    from = { transform: 'scale(.92)', borderRadius: '24px', opacity: 0 };
+    from = {
+      transform: 'scale(.88)',
+      borderRadius: '28px',
+      opacity: 0,
+      filter: 'blur(3px)',
+    };
   }
 
-  el.animate([from, { transform: 'none', borderRadius: '0px', opacity: 1 }], {
-    duration: 420,
-    easing: 'cubic-bezier(.2, .9, .25, 1)',
-  });
+  if (reduced()) return;
+
+  el.animate(
+    [
+      from,
+      {
+        transform: 'scale(1.015)',
+        borderRadius: '2px',
+        opacity: 1,
+        filter: 'blur(0px)',
+        offset: 0.78,
+      },
+      {
+        transform: 'scale(1)',
+        borderRadius: '0px',
+        opacity: 1,
+        filter: 'blur(0px)',
+      },
+    ],
+    {
+      duration: 480,
+      easing: 'cubic-bezier(.16, 1, .3, 1)',
+      fill: 'none',
+    }
+  );
 }
 
 export function initTransitions() {

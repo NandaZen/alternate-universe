@@ -548,3 +548,16 @@
     transition: none;
   }
 }
+/* iPhone Home Indicator */
+.phone__home-indicator {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  width: 108px;
+  height: 4px;
+  border-radius: 999px;
+  background: #fff;
+  pointer-events: none;
+}
