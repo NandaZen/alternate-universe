@@ -1,8 +1,20 @@
 /* iPhone: frame, status bar, home, Settings, notifikasi. Semua di-scope ke .phone. */
 .phone {
-  --sb-h: 54px; --home-h: 30px; --radius: 52px; --w: 390px; --h: 844px;
+  --sb-h: 54px;
+  --home-h: 30px;
+  --radius: 52px;
+  --w: 390px;
+  --h: 844px;
   --ios-font: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
-  position: relative; z-index: 20; display: grid; place-items: center; min-height: 100dvh; padding: 16px;
+
+  position: relative;
+  z-index: 20;
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  min-height: 100dvh;
+  box-sizing: border-box;
+  padding: 16px;
   background: radial-gradient(circle at 50% 30%, #3a3a44, #121216 70%);
   font-family: var(--ios-font);
 }
@@ -11,9 +23,14 @@ body[data-view="landing"] .phone { display: none; }
 body[data-view="home"] #floating-nav { display: none !important; }
 
 .phone__frame {
-  position: relative; width: var(--w); max-width: 100%;
+  position: relative;
+  width: var(--w);
+  max-width: 100%;
+  height: min(var(--h), calc(100vh - 32px));
   height: min(var(--h), calc(100dvh - 32px));
-  padding: 12px; border-radius: calc(var(--radius) + 12px);
+  box-sizing: border-box;
+  padding: 12px;
+  border-radius: calc(var(--radius) + 12px);
   background: linear-gradient(145deg, #2b2b31, #0c0c0f 60%);
   box-shadow: 0 0 0 2px #55555d, 0 0 0 5px #1b1b20, 0 30px 80px rgba(0,0,0,.55);
 }
