@@ -65,7 +65,8 @@ const GRAB = '<button type="button" class="sheet__grab" data-action="phone-close
 
 function shellHtml() {
   return `
-    <div class="phone__island" aria-hidden="true"></div>
+  <div class="phone__island" aria-hidden="true"><i class="phone__lens"></i></div>
+   <div class="phone__glare" aria-hidden="true"></div>
     <header class="statusbar">
       <button type="button" class="statusbar__zone statusbar__zone--l" data-zone="notif" aria-label="Notification Center"><time id="sb-time">9:41</time><span class="sb-ind" id="sb-ind"></span></button>
       <button type="button" class="statusbar__zone statusbar__zone--r" data-zone="control" aria-label="Control Center"><span class="sb-icons" id="sb-icons"></span></button>

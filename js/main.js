@@ -16,6 +16,9 @@ import { initTransitions } from './phone/transitions.js';
 import { initCalender, renderCalender } from './apps/calender.js';
 import { initCalculator, renderCalculator } from './apps/calculator.js';
 import { initFullscreen } from './phone/fullscreen.js';
+import { initFit } from './phone/fit.js';
+import { initSmoothScroll } from './phone/smooth-scroll.js';
+import { initGestures } from './phone/gesture.js';
 
 await startStore(); // tunggu semua koleksi terbaca dulu
 initState();
@@ -35,6 +38,9 @@ initLock();
 initTransitions();
 initCalls();
 initFullscreen();
+initFit();
+initSmoothScroll();
+initGestures();
 applyRoute();
 
 onStoreChange(() => {
