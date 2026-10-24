@@ -64,8 +64,39 @@ body[data-view="home"] #floating-nav { display: none !important; }
   background-position: center, 0 0, 0 0, 0 0;
   background-repeat: no-repeat;
 }
-.phone #home-content { height: 100%; }
-.ios-home { height: 100%; display: flex; flex-direction: column; padding: 8px 18px calc(var(--home-h) + 6px); gap: 18px; }
+.phone #home-content {
+  height: 100%;
+  min-height: 0;
+  box-sizing: border-box;
+}
+
+.ios-home {
+  height: 100%;
+  min-height: 0;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  padding: 8px 18px calc(var(--home-h) + 6px);
+  gap: 18px;
+  overflow: hidden;
+}
+
+.ios-dots {
+  flex-shrink: 0;
+  margin-top: auto;
+}
+
+.ios-dock {
+  flex-shrink: 0;
+  display: flex;
+  justify-content: space-around;
+  padding: 12px 10px;
+  margin-bottom: 0;
+  border-radius: 30px;
+  background: rgba(255,255,255,.25);
+  backdrop-filter: blur(24px) saturate(1.5);
+  -webkit-backdrop-filter: blur(24px) saturate(1.5);
+}
 .ios-widgets { display: grid; grid-template-columns: 1fr 1.6fr; gap: 12px; }
 .widget {
   display: grid; align-content: space-between; gap: 2px; min-height: 126px; padding: 14px; border-radius: 22px; color: #fff;
