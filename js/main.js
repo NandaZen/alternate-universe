@@ -15,6 +15,7 @@ import { initLock } from './phone/lock.js';
 import { initTransitions } from './phone/transitions.js';
 import { initCalender, renderCalender } from './apps/calender.js';
 import { initCalculator, renderCalculator } from './apps/calculator.js';
+import { initFullscreen } from './phone/fullscreen.js';
 
 await startStore(); // tunggu semua koleksi terbaca dulu
 initState();
@@ -33,6 +34,7 @@ initPhone();
 initLock();
 initTransitions();
 initCalls();
+initFullscreen();
 applyRoute();
 
 onStoreChange(() => {
