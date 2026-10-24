@@ -2,7 +2,11 @@
 
 import { getState, subscribe, setCharacter, setDate } from './state.js';
 import { characters, playableCharacters, storyMeta } from './data/characters.js';
-import { timeline, getDay } from './data/timeline.js';
+import {
+  getTimeline,
+  getStoryMeta,
+  onStoreChange,
+} from './data/store.js';
 import { icon } from './icons.js';
 import { esc, $, $$, formatWeekday, formatDayNumber, formatMonthShort, formatFullDate, plural } from './utils.js';
 import { registerAction, navigate, setLandingSection } from './navigation.js';
@@ -41,6 +45,7 @@ function supportingCast() {
 }
 
 function dateCards(state) {
+  const timeline = getTimeline();
   return timeline
     .map((day) => {
       const active = day.date === state.activeStoryDate;
@@ -61,17 +66,32 @@ function dateCards(state) {
 }
 
 function dateDetail(state) {
-  const day = getDay(state.activeStoryDate);
+  const day = getTimeline().find(
+    item => item.date === state.activeStoryDate
+  );
+
   if (!day) return '';
+
+  const events = Array.isArray(day.events) ? day.events : [];
+
   return `<div class="date-detail">
     <div>
       <p class="eyebrow">${esc(formatFullDate(day.date))}</p>
-      <h3>${esc(day.title)}</h3>
-      <ol class="date-events">${day.events
-        .map((e) => `<li><time>${esc(e.time)}</time><div><strong>${esc(e.title)}</strong><span>${esc(e.summary)}</span></div></li>`)
+      <h3>${esc(day.title || day.label || day.date)}</h3>
+      <ol class="date-events">${events
+        .map(e => `<li>
+          <time>${esc(e.time || '')}</time>
+          <div>
+            <strong>${esc(e.title || '')}</strong>
+            <span>${esc(e.summary || '')}</span>
+          </div>
+        </li>`)
         .join('')}</ol>
     </div>
-    <button type="button" class="btn btn--solid btn--lg" data-action="nav" data-route="home">Open the phone ${icon('arrowRight', 18)}</button>
+    <button type="button" class="btn btn--solid btn--lg"
+      data-action="nav" data-route="home">
+      Open the phone ${icon('arrowRight', 18)}
+    </button>
   </div>`;
 }
 
@@ -79,7 +99,7 @@ export function renderLanding() {
   const root = $('#view-landing');
   if (!root) return;
   const s = getState();
-  const meta = storyMeta;
+  const meta = getStoryMeta(storyMeta);
 
   $('#landing-cards').innerHTML = characterCards(s) + supportingCast();
   $('#landing-dates').innerHTML = dateCards(s);
@@ -110,6 +130,12 @@ function observeSections() {
 }
 
 export function initLanding() {
+  let unsubscribeLandingStore = null;
+  if (!unsubscribeLandingStore) {
+    unsubscribeLandingStore = onStoreChange(() => {
+      renderLanding();
+    });
+  }
   registerAction('pick-character', (el) => setCharacter(el.dataset.id));
   registerAction('pick-date', (el) => setDate(el.dataset.date));
   registerAction('scroll-dates', () => navigate('dates'));

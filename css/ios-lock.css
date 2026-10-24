@@ -85,5 +85,3 @@ body[data-locked] .banner-host { display: none; }
 /* ---------- perbaikan: overlay kecerahan harus di atas status bar, island, dan banner ---------- */
 .phone .phone__dim { z-index: 90; }
 
-/* ---------- dock iOS tidak punya label ---------- */
-.phone .ios-dock .ios-icon__label { display: none; }

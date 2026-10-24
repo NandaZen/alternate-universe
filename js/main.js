@@ -13,6 +13,8 @@ import { initSettingsApp } from './apps/settings.js';
 import { initCalls } from './phone/call.js';
 import { initLock } from './phone/lock.js';
 import { initTransitions } from './phone/transitions.js';
+import { initCalender, renderCalender } from './apps/calender.js';
+import { initCalculator, renderCalculator } from './apps/calculator.js';
 
 await startStore(); // tunggu semua koleksi terbaca dulu
 initState();
@@ -24,6 +26,8 @@ initWhatsApp(registerAction);
 initGallery(registerAction);
 initTwitter(registerAction);
 initStories(registerAction);
+initCalculator();
+initCalender();
 initSettingsApp();
 initPhone();
 initLock();
@@ -35,6 +39,8 @@ onStoreChange(() => {
   renderLanding();
   renderHome();
   renderNav();
+  renderCalender();
+  renderCalculator();
 });
 
 document.getElementById('app-loading')?.remove(); // opsional: loader di HTML

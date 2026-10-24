@@ -23,16 +23,13 @@ body[data-view="landing"] .phone { display: none; }
 body[data-view="home"] #floating-nav { display: none !important; }
 
 .phone__frame {
-  position: relative;
   width: var(--w);
   max-width: 100%;
-  height: min(var(--h), calc(100vh - 32px));
-  height: min(var(--h), calc(100dvh - 32px));
+  height: calc(100dvh - 32px);
+  max-height: var(--h);
   box-sizing: border-box;
   padding: 12px;
-  border-radius: calc(var(--radius) + 12px);
-  background: linear-gradient(145deg, #2b2b31, #0c0c0f 60%);
-  box-shadow: 0 0 0 2px #55555d, 0 0 0 5px #1b1b20, 0 30px 80px rgba(0,0,0,.55);
+  overflow: hidden;
 }
 /* tombol samping */
 .phone__frame::before { content: ""; position: absolute; left: -7px; top: 150px; width: 3px; height: 56px; border-radius: 2px 0 0 2px; background: #3a3a42; box-shadow: 0 84px 0 #3a3a42, 0 -48px 0 -8px #3a3a42; }
@@ -48,12 +45,18 @@ body[data-view="home"] #floating-nav { display: none !important; }
 .phone #view-home, .phone .app-layer, .phone .app { position: absolute; inset: 0; box-sizing: border-box; width: 100%; max-width: none; margin: 0; }
 .phone .app { padding-top: var(--sb-h); padding-bottom: var(--home-h); overflow: hidden; }
 
-/* ---------- home ---------- */
-/* --wallpaper diisi dari JS (landing.js → characters/<id>.wallpaperUrl).
-   Kalau kosong, nilainya "none" dan gradient bawaan tampil sebagai fallback. */
+
+/* ---------- home screen iOS ---------- */
 .phone #view-home {
   --wallpaper: none;
-  padding: var(--sb-h) 0 0; overflow: hidden; min-height: 0; height: 100%;
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  min-height: 0;
+  padding: var(--sb-h) 0 0;
+  box-sizing: border-box;
+  overflow: hidden;
+
   background-color: #4a5fd6;
   background-image:
     var(--wallpaper),
@@ -61,67 +64,253 @@ body[data-view="home"] #floating-nav { display: none !important; }
     radial-gradient(100% 60% at 100% 100%, #ff8fb1 0%, transparent 55%),
     linear-gradient(160deg, #4a5fd6, #8b5cf6 55%, #e879a9);
   background-size: cover, auto, auto, auto;
-  background-position: center, 0 0, 0 0, 0 0;
+  background-position: center;
   background-repeat: no-repeat;
 }
-.phone #home-content {
+
+.phone #view-home #home-content {
   height: 100%;
   min-height: 0;
   box-sizing: border-box;
+  background: transparent;
 }
 
-.ios-home {
+.phone #view-home .ios-home {
+  width: 100%;
   height: 100%;
   min-height: 0;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  padding: 8px 18px calc(var(--home-h) + 6px);
-  gap: 18px;
+  gap: clamp(12px, 2.2dvh, 20px);
+  padding: 10px 20px calc(var(--home-h) + 10px);
   overflow: hidden;
+  background: transparent;
 }
 
-.ios-dots {
+/* Widgets */
+.phone .ios-widgets {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.4fr);
+  gap: 12px;
   flex-shrink: 0;
-  margin-top: auto;
 }
-
-.ios-dock {
-  flex-shrink: 0;
+.phone .widget {
+  min-width: 0;
+  height: 140px;
+  min-height: 140px;
+  box-sizing: border-box;
   display: flex;
-  justify-content: space-around;
-  padding: 12px 10px;
-  margin-bottom: 0;
-  border-radius: 30px;
-  background: rgba(255,255,255,.25);
-  backdrop-filter: blur(24px) saturate(1.5);
-  -webkit-backdrop-filter: blur(24px) saturate(1.5);
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 4px;
+  padding: 14px;
+  overflow: hidden;
+  border-radius: 23px;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.20);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(22px) saturate(1.5);
+  -webkit-backdrop-filter: blur(22px) saturate(1.5);
 }
-.ios-widgets { display: grid; grid-template-columns: 1fr 1.6fr; gap: 12px; }
-.widget {
-  display: grid; align-content: space-between; gap: 2px; min-height: 126px; padding: 14px; border-radius: 22px; color: #fff;
-  background: rgba(255,255,255,.22); backdrop-filter: blur(18px) saturate(1.4); -webkit-backdrop-filter: blur(18px) saturate(1.4);
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,.25);
-}
-.widget small { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .05em; opacity: .85; }
-.widget--date b { font-size: 54px; line-height: 1; font-weight: 300; }
-.widget--date span { font-size: 14px; font-weight: 600; }
-.widget--day strong { font-size: 17px; line-height: 1.2; }
-.widget--day span { font-size: 12.5px; line-height: 1.35; opacity: .9; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 
-.ios-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px 8px; align-content: start; }
-.ios-icon { display: grid; justify-items: center; gap: 6px; border: 0; background: none; padding: 0; cursor: pointer; color: #fff; font: 500 11px var(--ios-font); }
-.ios-icon .app-tile { position: relative; display: block; width: 60px; height: 60px; border-radius: 14px; }
-.ios-icon .app-tile > svg { width: 100%; height: 100%; display: block; border-radius: 14px; }
-.ios-icon:active .app-tile { transform: scale(.92); }
-.ios-icon__label { text-shadow: 0 1px 3px rgba(0,0,0,.35); }
-.ios-icon .badge { position: absolute; top: -6px; right: -6px; min-width: 22px; height: 22px; padding: 0 6px; border-radius: 11px; display: grid; place-items: center; background: #ff3b30; color: #fff; font: 600 13px var(--ios-font); }
-.ios-dots { margin-top: auto; display: flex; justify-content: center; gap: 7px; }
-.ios-dots i { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,.4); }
-.ios-dots i.on { background: #fff; }
-.ios-dock {
-  display: flex; justify-content: space-around; padding: 12px 10px; border-radius: 30px;
-  background: rgba(255,255,255,.25); backdrop-filter: blur(24px) saturate(1.5); -webkit-backdrop-filter: blur(24px) saturate(1.5);
+.phone .widget small {
+  font-size: 11px;
+  font-weight: 650;
+  text-transform: uppercase;
+  letter-spacing: 0.045em;
+  opacity: 0.9;
+}
+
+.phone .widget--date b {
+  font-size: clamp(42px, 7dvh, 56px);
+  line-height: 0.95;
+  font-weight: 300;
+  letter-spacing: -0.04em;
+}
+
+.phone .widget--date span {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.phone .widget--day strong {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  font-size: 16px;
+  line-height: 1.2;
+}
+
+.phone .widget--day span {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+  font-size: 12px;
+  line-height: 1.35;
+  opacity: 0.9;
+}
+
+/* App grid */
+.phone .ios-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-content: start;
+  justify-items: center;
+  gap: 20px 8px;
+  flex-shrink: 0;
+}
+
+.phone .ios-icon {
+  min-width: 0;
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: 6px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #fff;
+  font: 500 11px var(--ios-font);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.phone .ios-icon .app-tile {
+  position: relative;
+  display: block;
+  width: 58px;
+  height: 58px;
+  border-radius: 14px;
+  flex-shrink: 0;
+}
+
+.phone .ios-icon .app-tile > svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+}
+
+.phone .ios-dock .app-tile {
+  width: 56px;
+  height: 56px;
+}
+
+.phone .ios-icon__label {
+  max-width: 76px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.45);
+}
+
+.phone .ios-icon .badge {
+  position: absolute;
+  top: -6px;
+  right: -7px;
+  min-width: 21px;
+  height: 21px;
+  padding: 0 5px;
+  box-sizing: border-box;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  background: #ff3b30;
+  color: #fff;
+  font: 600 12px var(--ios-font);
+}
+
+/* Home page indicator dots */
+.phone .ios-dots {
+  display: flex;
+  flex-shrink: 0;
+  justify-content: center;
+  align-items: center;
+  gap: 7px;
+  margin-top: auto;
+  min-height: 7px;
+}
+
+.phone .ios-dots i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.45);
+}
+
+.phone .ios-dots i.on {
+  background: #fff;
+}
+
+/* Dock */
+.phone .ios-dock {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: space-around;
+  gap: 4px;
+  min-height: 78px;
+  padding: 10px 8px;
+  box-sizing: border-box;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 27px;
+  background: rgba(255, 255, 255, 0.24);
+  backdrop-filter: blur(26px) saturate(1.6);
+  -webkit-backdrop-filter: blur(26px) saturate(1.6);
+}
+
+.phone .ios-dock .ios-icon {
+  flex: 1;
+}
+
+.phone .ios-dock .app-tile {
+  width: clamp(46px, 13vw, 58px);
+  height: clamp(46px, 13vw, 58px);
+}
+
+/* Viewport pendek: kecilkan elemen agar dock tetap terlihat */
+@media (max-height: 760px) {
+  .phone #view-home .ios-home {
+    gap: 10px;
+    padding-top: 6px;
+    padding-bottom: calc(var(--home-h) + 4px);
+  }
+
+  .phone .ios-widgets {
+    gap: 8px;
+  }
+
+  .phone .widget {
+    height: clamp(92px, 16dvh, 112px);
+    padding: 10px;
+    border-radius: 19px;
+  }
+
+  .phone .widget--date b {
+    font-size: 40px;
+  }
+
+  .phone .ios-grid {
+    gap: 12px 6px;
+  }
+
+  .phone .ios-icon .app-tile {
+    width: 48px;
+    height: 48px;
+  }
+
+  .phone .ios-dock {
+    min-height: 64px;
+    padding: 7px;
+  }
+
+  .phone .ios-dock .app-tile {
+    width: 46px;
+    height: 46px;
+  }
 }
 
 /* status bar & home indicator putih di home screen */
@@ -340,5 +529,39 @@ body[data-call] .phone__home span { background: #fff; }
 
   .ios-dock {
     padding: 8px;
+  }
+    .phone #view-home .ios-home {
+    gap: 12px;
+    padding-top: 8px;
+    padding-bottom: calc(var(--home-h) + 4px);
+  }
+
+  .phone .ios-widgets {
+    gap: 8px;
+  }
+
+  .phone .ios-grid {
+    gap: 14px 8px;
+  }
+
+  .phone .ios-dock {
+    min-height: 76px;
+    padding: 8px;
+  }
+}
+@media (max-width: 520px) {
+  .phone {
+    padding: 0;
+    --sb-h: 44px;
+    --home-h: 24px;
+  }
+
+  .phone__frame {
+    width: 100%;
+    height: 100dvh;
+    max-height: none;
+    padding: 0;
+    border-radius: 0;
+    box-shadow: none;
   }
 }

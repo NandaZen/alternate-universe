@@ -171,6 +171,459 @@ h1, h2, h3, p { margin: 0; }
 .badge { position: absolute; top: -7px; right: -7px; min-width: 24px; height: 24px; padding: 0 6px; border-radius: 12px; background: #ff3b30; color: #fff; font-size: 0.78rem; font-weight: 700; display: grid; place-items: center; box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.9); }
 .home__hint { color: var(--ink-2); font-size: 0.85rem; max-width: 420px; text-align: center; }
 
+/* ==========================================
+   iPHONE HOME SCREEN — SINGLE SOURCE OF TRUTH
+   Widget tidak bertumpuk dengan ikon aplikasi
+   ========================================== */
+
+#home-content {
+  width: 100%;
+  min-width: 0;
+}
+
+#home-content .ios-home {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0;
+
+  width: 100%;
+  max-width: 520px;
+  min-width: 0;
+  min-height: 0;
+  height: auto;
+
+  margin: 0 auto;
+  padding: 18px 14px 24px;
+  overflow: hidden;
+  border-radius: 0;
+
+  font-family: -apple-system, BlinkMacSystemFont,
+    "SF Pro Display", "Helvetica Neue", sans-serif;
+
+  background:
+    radial-gradient(ellipse at 8% 8%,
+      rgba(255, 190, 92, .68), transparent 37%),
+    radial-gradient(ellipse at 94% 48%,
+      rgba(105, 142, 191, .62), transparent 42%),
+    radial-gradient(ellipse at 42% 100%,
+      rgba(190, 91, 101, .58), transparent 43%),
+    linear-gradient(155deg, #a8b4c7, #303848 65%, #151820);
+}
+
+/* Dua widget dalam satu baris dengan tinggi konsisten */
+#home-content .ios-widgets {
+  position: relative;
+  z-index: 1;
+
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 10px;
+
+  width: 100%;
+  min-width: 0;
+  margin: 0 0 28px;
+}
+
+/* Kartu cuaca dan cerita */
+#home-content .ios-widgets > #story-weather,
+#home-content .ios-widgets > .weather-widget,
+#home-content .ios-widgets > .widget--day {
+  position: relative;
+  inset: auto;
+  float: none;
+
+  width: 100%;
+  height: 172px;
+  min-width: 0;
+  min-height: 172px;
+  max-height: 172px;
+  aspect-ratio: auto;
+
+  margin: 0;
+  overflow: hidden;
+  border-radius: 23px;
+}
+
+/* Widget cuaca */
+#home-content #story-weather {
+  padding: 13px 11px;
+  color: #fff;
+  background: linear-gradient(160deg, #1559a6, #70b6e8);
+}
+
+#home-content #story-weather .weather-widget__content {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  padding: 0;
+}
+
+#home-content #story-weather .weather-widget__place {
+  width: 100%;
+  min-width: 0;
+}
+
+#home-content #story-weather .weather-widget__place small {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 9px;
+  line-height: 1.3;
+}
+
+#home-content #story-weather .weather-widget__place strong {
+  display: -webkit-box;
+  overflow: hidden;
+  font-size: 13px;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+#home-content #story-weather .weather-widget__condition {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  margin: 7px 0 0;
+  min-width: 0;
+}
+
+#home-content #story-weather .weather-widget__condition .weather-widget__icon {
+  font-size: 27px;
+  line-height: 1;
+}
+
+#home-content #story-weather .weather-widget__condition b {
+  font-size: 38px;
+  line-height: 1;
+  font-weight: 300;
+  letter-spacing: -1px;
+}
+
+#home-content #story-weather .weather-widget__condition div > span {
+  display: block;
+  margin-top: 3px;
+  font-size: 11px;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+#home-content #story-weather .weather-widget__timestamp,
+#home-content #story-weather .weather-widget__details,
+#home-content #story-weather .weather-widget__source {
+  display: none !important;
+}
+
+/* Status loading/error tetap berada di dalam kartu */
+#home-content #story-weather.weather-widget--loading {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 5px;
+}
+
+#home-content #story-weather .weather-widget__message {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+#home-content #story-weather .weather-widget__message .weather-widget__icon {
+  font-size: 25px;
+}
+
+#home-content #story-weather .weather-widget__message strong {
+  font-size: 12px;
+  line-height: 1.3;
+}
+
+#home-content #story-weather .weather-widget__message p {
+  margin-top: 3px;
+  font-size: 10px;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+
+/* Widget tanggal/agenda cerita */
+#home-content .ios-widgets > .widget--day {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 7px;
+
+  padding: 15px 12px;
+  color: #1c1c1e;
+  background: #fff;
+  border: 1px solid rgba(255, 255, 255, .85);
+  box-shadow: 0 5px 16px rgba(20, 20, 30, .08);
+}
+
+#home-content .widget--day small {
+  color: #ff453a;
+  font-size: 10px;
+  font-weight: 750;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+#home-content .widget--day strong {
+  display: -webkit-box;
+  width: 100%;
+  overflow: hidden;
+  font-size: 13px;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+#home-content .widget--day span {
+  display: -webkit-box;
+  width: 100%;
+  overflow: hidden;
+  color: #8e8e93;
+  font-size: 11px;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+/* Grid aplikasi dimulai setelah margin widget selesai */
+#home-content .ios-grid {
+  position: relative;
+  z-index: 1;
+
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: start;
+  justify-items: center;
+  align-content: start;
+  gap: 22px 8px;
+
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+}
+
+#home-content .ios-icon {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 6px;
+
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+
+  text-align: center;
+  -webkit-tap-highlight-color: transparent;
+}
+
+#home-content .ios-icon .app-tile {
+  position: relative;
+  display: block;
+  flex: none;
+
+  width: 56px;
+  max-width: 100%;
+  height: 56px;
+  aspect-ratio: 1;
+
+  overflow: visible;
+  border-radius: 15px;
+}
+
+#home-content .ios-icon .app-tile svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+}
+
+#home-content .ios-icon__label {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+
+  color: #fff;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.25;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, .65);
+}
+
+/* Indikator halaman */
+#home-content .ios-dots {
+  position: relative;
+  z-index: 1;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  min-height: 8px;
+  margin: 28px 0 18px;
+}
+
+#home-content .ios-dots i {
+  display: block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .45);
+}
+
+#home-content .ios-dots i.on {
+  background: #fff;
+}
+
+/* Dock berada setelah grid, bukan melayang menimpa aplikasi */
+#home-content .ios-dock {
+  position: relative;
+  z-index: 1;
+
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: center;
+  justify-items: center;
+  gap: 8px;
+
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  margin: 0;
+  padding: 10px 8px;
+
+  border: 1px solid rgba(255, 255, 255, .24);
+  border-radius: 24px;
+  background: rgba(210, 194, 255, .3);
+
+  -webkit-backdrop-filter: blur(22px) saturate(1.5);
+  backdrop-filter: blur(22px) saturate(1.5);
+}
+
+#home-content .ios-dock .ios-icon {
+  gap: 0;
+}
+
+#home-content .ios-dock .ios-icon .app-tile {
+  width: 52px;
+  height: 52px;
+  border-radius: 15px;
+}
+
+#home-content .ios-dock .ios-icon__label {
+  display: none;
+}
+
+/* Layar sangat kecil */
+@media (max-width: 360px) {
+  #home-content .ios-home {
+    padding-right: 10px;
+    padding-left: 10px;
+  }
+
+  #home-content .ios-widgets {
+    gap: 8px;
+    margin-bottom: 23px;
+  }
+
+  #home-content .ios-widgets > #story-weather,
+  #home-content .ios-widgets > .weather-widget,
+  #home-content .ios-widgets > .widget--day {
+    height: 158px;
+    min-height: 158px;
+    max-height: 158px;
+    padding: 11px 9px;
+  }
+
+  #home-content #story-weather .weather-widget__condition b {
+    font-size: 34px;
+  }
+
+  #home-content .widget--day strong {
+    font-size: 12px;
+  }
+
+  #home-content .widget--day span {
+    font-size: 10px;
+  }
+
+  #home-content .ios-grid {
+    gap: 19px 5px;
+  }
+
+  #home-content .ios-icon .app-tile {
+    width: 50px;
+    height: 50px;
+  }
+
+  #home-content .ios-icon__label {
+    font-size: 10px;
+  }
+
+  #home-content .ios-dock .ios-icon .app-tile {
+    width: 47px;
+    height: 47px;
+  }
+}
+
+/* Desktop/tablet */
+@media (min-width: 600px) {
+  #home-content .ios-home {
+    padding: 24px 20px;
+  }
+
+  #home-content .ios-widgets {
+    gap: 14px;
+    margin-bottom: 30px;
+  }
+
+  #home-content .ios-widgets > #story-weather,
+  #home-content .ios-widgets > .weather-widget,
+  #home-content .ios-widgets > .widget--day {
+    height: 190px;
+    min-height: 190px;
+    max-height: 190px;
+    padding: 17px 14px;
+  }
+
+  #home-content .ios-icon .app-tile {
+    width: 64px;
+    height: 64px;
+  }
+
+  #home-content .ios-dock .ios-icon .app-tile {
+    width: 56px;
+    height: 56px;
+  }
+}
+
 /* ---------- app layer (apps slide up over the home screen) ---------- */
 .app-layer { position: fixed; inset: 0; z-index: 40; pointer-events: none; }
 .app-layer.is-open { pointer-events: auto; }

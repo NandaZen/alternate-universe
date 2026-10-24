@@ -39,6 +39,36 @@ export const appTiles = {
      tile: '<svg viewBox="0 0 60 60" aria-hidden="true"><rect width="60" height="60" rx="14" fill="#8e8e93"/><g transform="translate(30 30)" fill="#fff"><circle r="12"/><rect x="-3" y="-18" width="6" height="36" rx="2"/><rect x="-3" y="-18" width="6" height="36" rx="2" transform="rotate(45)"/><rect x="-3" y="-18" width="6" height="36" rx="2" transform="rotate(90)"/><rect x="-3" y="-18" width="6" height="36" rx="2" transform="rotate(135)"/><circle r="5" fill="#8e8e93"/></g></svg>'
    },
 
+  calender: `
+  <svg viewBox="0 0 64 64" aria-hidden="true">
+    <rect width="64" height="64" rx="15" fill="#fff"/>
+    <rect x="0" y="0" width="64" height="19" rx="15" fill="#ff453a"/>
+    <rect x="0" y="10" width="64" height="9" fill="#ff453a"/>
+    <text x="32" y="14" text-anchor="middle"
+      font-size="9" font-weight="700" fill="#fff">JUL</text>
+    <text x="32" y="49" text-anchor="middle"
+      font-size="32" font-weight="600" fill="#222">23</text>
+  </svg>
+`,
+
+calculator: `
+  <svg viewBox="0 0 64 64" aria-hidden="true">
+    <rect width="64" height="64" rx="15" fill="#d9d9de"/>
+    <rect x="13" y="7" width="38" height="50" rx="7" fill="#333"/>
+    <rect x="19" y="13" width="26" height="10" rx="2" fill="#c6d5c2"/>
+    <g fill="#f5f5f7">
+      <circle cx="22" cy="30" r="3.5"/>
+      <circle cx="32" cy="30" r="3.5"/>
+      <circle cx="42" cy="30" r="3.5"/>
+      <circle cx="22" cy="40" r="3.5"/>
+      <circle cx="32" cy="40" r="3.5"/>
+      <circle cx="42" cy="40" r="3.5"/>
+      <circle cx="22" cy="50" r="3.5"/>
+      <circle cx="32" cy="50" r="3.5"/>
+    </g>
+    <circle cx="42" cy="50" r="3.5" fill="#ff9f0a"/>
+  </svg>
+`,
 
 };
 
@@ -80,11 +110,40 @@ export function icon(name, size = 20, { fill = false, className = '' } = {}) {
   return `<svg class="ico ${className}" viewBox="0 0 24 24" width="${size}" height="${size}" fill="${fill ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${body}</svg>`;
 }
 
+
 export const APP_META = {
-  notes: { title: 'Notes', tile: appTiles.notes },
-  whatsapp: { title: 'WhatsApp', tile: appTiles.whatsapp },
-  gallery: { title: 'Gallery', tile: appTiles.gallery },
-  twitter: { title: 'X', tile: appTiles.twitter },
-  stories: { title: 'Stories', tile: appTiles.stories },
+  notes: {
+    title: 'Notes',
+    tile: appTiles.notes,
+  },
+  stories: {
+    title: 'Stories',
+    tile: appTiles.stories,
+  },
+  whatsapp: {
+    title: 'WhatsApp',
+    tile: appTiles.whatsapp,
+  },
+  twitter: {
+    title: 'X',
+    tile: appTiles.twitter,
+  },
+  gallery: {
+    title: 'Photos',
+    tile: appTiles.gallery,
+  },
+  settings: {
+    title: 'Settings',
+    tile: appTiles.settings.tile,
+  },
+  calender: {
+  title: 'Calender',
+  tile: appTiles.calender,
+  },
+  calculator: {
+    title: 'Calculator',
+    tile: appTiles.calculator,
+  },
 };
+
 

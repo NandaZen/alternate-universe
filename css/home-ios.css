@@ -1,0 +1,271 @@
+/* =========================================================
+   HOME SCREEN iOS — satu-satunya sumber gaya untuk home.
+   Muat PALING AKHIR (setelah main, apps, phone, dll).
+   Semua class berawalan "hs-" sehingga tidak bentrok dengan
+   .ios-home / .ios-widgets / .widget / .home yang lama.
+   Struktur atas -> bawah:
+     .hs-widgets  (Weather + Calendar, masing-masing + label)
+     .hs-grid     (4 kolom, ikon + label)
+     .hs-dots
+     .hs-dock     (4 ikon, tanpa label)
+   Ukuran memakai container units (cqw/cqh) milik #home-content,
+   jadi ikut skala dengan lebar/tinggi layar ponsel.
+   ========================================================= */
+
+.phone #view-home { padding: 0; overflow: hidden; }
+
+.phone #view-home #home-content {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  overflow: hidden;
+  background: transparent;
+  container-type: size;
+}
+
+.hs {
+  --icon: clamp(50px, 15.4cqw, 64px);
+  --pad: clamp(14px, 4.6cqw, 22px);
+
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  padding: calc(var(--sb-h) + 8px) var(--pad) calc(var(--home-h) + 8px);
+  color: #fff;
+  font-family: var(--ios-font, -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---------- widgets ---------- */
+.hs-widgets {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(10px, 3.4cqw, 16px);
+}
+
+.hs-cell {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+
+.hs-label {
+  text-align: center;
+  font-size: clamp(11.5px, 3.3cqw, 13px);
+  font-weight: 500;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, .45);
+}
+
+.hs-widget {
+  position: relative;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+  aspect-ratio: 1 / 1;
+  max-height: 24cqh;
+  padding: clamp(12px, 4cqw, 17px);
+  overflow: hidden;
+  border: 0;
+  border-radius: clamp(20px, 6cqw, 25px);
+  text-align: left;
+  font: inherit;
+}
+
+/* Weather */
+.hs-wx {
+  color: #fff;
+  background: linear-gradient(180deg, #1c5ca8 0%, #4a8fd3 62%, #7bb5e6 100%);
+}
+.hs-wx.is-night { background: linear-gradient(180deg, #0c1a3d 0%, #223868 68%, #3a4e86 100%); }
+
+.hs-wx__place {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+  font-size: clamp(14px, 4.3cqw, 17px);
+  font-weight: 600;
+  line-height: 1.15;
+}
+.hs-wx__place svg { flex: none; }
+.hs-wx__name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.hs-wx__temp {
+  margin-top: 2px;
+  font-size: clamp(34px, 11.8cqw, 48px);
+  font-weight: 300;
+  line-height: 1.02;
+  letter-spacing: -1.5px;
+}
+.hs-wx__cond {
+  display: grid;
+  gap: 2px;
+  margin-top: auto;
+  font-size: clamp(12px, 3.6cqw, 14.5px);
+  font-weight: 500;
+  line-height: 1.2;
+}
+.hs-wx__icon { font-size: clamp(16px, 5cqw, 20px); line-height: 1; }
+
+/* Calendar */
+.hs-cal {
+  align-items: flex-start;
+  color: #1c1c1e;
+  background: #fff;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.hs-cal__dow {
+  color: #ff3b30;
+  font-size: clamp(11px, 3.4cqw, 13.5px);
+  font-weight: 700;
+  letter-spacing: .02em;
+  text-transform: uppercase;
+}
+.hs-cal__num {
+  margin-top: 1px;
+  font-size: clamp(34px, 11.8cqw, 48px);
+  font-weight: 400;
+  line-height: 1.02;
+  letter-spacing: -1px;
+}
+.hs-cal__ev {
+  display: -webkit-box;
+  margin-top: auto;
+  overflow: hidden;
+  color: #8e8e93;
+  font-size: clamp(13px, 4cqw, 16.5px);
+  font-weight: 500;
+  line-height: 1.2;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+/* ---------- grid aplikasi ---------- */
+.hs-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-content: start;
+  justify-items: center;
+  gap: clamp(12px, 3.6cqw, 18px) 0;
+  margin-top: clamp(14px, 3.4cqh, 26px);
+}
+
+.hs-icon {
+  display: grid;
+  justify-items: center;
+  gap: 5px;
+  width: 100%;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #fff;
+  font: inherit;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.hs-icon .app-tile {
+  position: relative;
+  display: block;
+  width: var(--icon);
+  height: var(--icon);
+  border-radius: calc(var(--icon) * .225);
+  box-shadow: none;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, .2));
+  transition: transform .14s ease;
+}
+.hs-icon .app-tile > svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+}
+.hs-icon:active .app-tile { transform: scale(.9); }
+
+.hs-icon__label {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: clamp(10.5px, 3.1cqw, 12.5px);
+  font-weight: 500;
+  line-height: 1.2;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, .5);
+}
+
+.hs .badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  box-sizing: border-box;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+  border: 0;
+  border-radius: 11px;
+  background: #ff3b30;
+  color: #fff;
+  font: 600 13px/1 var(--ios-font, -apple-system, system-ui, sans-serif);
+  box-shadow: none;
+}
+
+/* ---------- dots & dock ---------- */
+.hs-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: auto;
+  padding-bottom: clamp(10px, 2.4cqh, 16px);
+}
+.hs-dots i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .42);
+}
+.hs-dots i.on { background: #fff; }
+
+.hs-dock {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: center;
+  justify-items: center;
+  padding: clamp(10px, 3cqw, 14px) clamp(8px, 2.6cqw, 12px);
+  border: 1px solid rgba(255, 255, 255, .2);
+  border-radius: clamp(26px, 8cqw, 34px);
+  background: rgba(255, 255, 255, .24);
+  -webkit-backdrop-filter: blur(28px) saturate(1.6);
+  backdrop-filter: blur(28px) saturate(1.6);
+}
+.hs-dock .hs-icon { width: auto; }
+
+/* ---------- layar pendek ---------- */
+@container (max-height: 700px) {
+  .hs { --icon: clamp(46px, 13.8cqw, 56px); }
+  .hs-grid { gap: 10px 0; margin-top: 12px; }
+  .hs-icon__label { font-size: 10.5px; }
+}
+@container (max-height: 600px) {
+  .hs-widget { max-height: 20cqh; }
+  .hs-label { display: none; }
+}
+
+/* ---------- efek saat app terbuka ---------- */
+.phone #view-home .hs { transition: transform .45s var(--ease, ease), filter .45s; }
+.phone #view-home.is-covered .hs { transform: scale(.94); filter: blur(4px); }
+
+@media (prefers-reduced-motion: reduce) {
+  .hs-icon .app-tile, .phone #view-home .hs { transition: none; }
+}
